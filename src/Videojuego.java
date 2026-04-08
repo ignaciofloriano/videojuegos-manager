@@ -8,6 +8,8 @@ public class Videojuego {
     private int puntuacion;
     private String notas;
 
+    // constructor
+
     public Videojuego(String titulo, String plataforma, String genero, int anio, String desarrolladora) {
         this.titulo = titulo;
         this.plataforma = plataforma;
@@ -18,6 +20,8 @@ public class Videojuego {
         this.puntuacion = 0;
         this.notas = "";
     }
+
+    // setters y getters
 
     public String getTitulo() {
         return titulo;
@@ -82,6 +86,8 @@ public class Videojuego {
     public void setNotas(String notas) {
         this.notas = notas;
     }
+
+    // toString
 
     @Override
     public String toString() {
