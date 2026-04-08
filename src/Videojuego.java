@@ -10,7 +10,7 @@ public class Videojuego {
 
     // constructor
 
-    public Videojuego(String titulo, String plataforma, String genero, int anio, String desarrolladora) {
+    public Videojuego(String titulo, String plataforma, String genero, int año, String desarrolladora) {
         this.titulo = titulo;
         this.plataforma = plataforma;
         this.genero = genero;
