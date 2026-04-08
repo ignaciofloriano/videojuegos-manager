@@ -7,7 +7,7 @@ public class Coleccion {
         this.juegos = new ArrayList<>();
     }
 
-    // metodos
+    // METODOS
 
     public void agregarJuego(Videojuego juego) {
         juegos.add(juego);
@@ -28,4 +28,52 @@ public class Coleccion {
             }
         }
     }
+
+    //busqueda por titulo
+
+    public Videojuego buscarPorTitulo(String titulo) {
+        for (Videojuego juego : juegos) {
+            if (juego.getTitulo().equalsIgnoreCase(titulo)) {
+                return juego;
+            }
+        }
+        return null;
+    }
+
+    // metodo para devolver lista con busqueda por plataforma
+
+    public ArrayList<Videojuego> filtrarPorPlataforma(String plataforma) {
+        ArrayList<Videojuego> resultado = new ArrayList<>();
+        for (Videojuego juego : juegos) {
+            if (juego.getPlataforma().equalsIgnoreCase(plataforma)) {
+                resultado.add(juego);
+            }
+        }
+        return resultado;
+    }
+
+    // busqueda por genero + lista
+
+    public ArrayList<Videojuego> filtrarPorGenero(String genero) {
+        ArrayList<Videojuego> resultado = new ArrayList<>();
+        for (Videojuego juego : juegos) {
+            if (juego.getGenero().equalsIgnoreCase(genero)) {
+                resultado.add(juego);
+            }
+        }
+        return resultado;
+    }
+
+    // busqueda por estado + lista
+
+    public ArrayList<Videojuego> filtrarPorEstado(String estado) {
+        ArrayList<Videojuego> resultado = new ArrayList<>();
+        for (Videojuego juego : juegos) {
+            if (juego.getEstado().equalsIgnoreCase(estado)) {
+                resultado.add(juego);
+            }
+        }
+        return resultado;
+    }
+
 }
