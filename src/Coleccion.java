@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Coleccion {
     private ArrayList<Videojuego> juegos;
@@ -75,5 +76,52 @@ public class Coleccion {
         }
         return resultado;
     }
+
+    // METODOS PARA ESTADISTICAS
+
+    public int totalJuegos() {
+        return juegos.size();
+    }
+
+    public double notaMedia() {
+        if (juegos.isEmpty()) {
+            return 0;
+        }
+        int suma = 0;
+        for (Videojuego juego : juegos) {
+            suma += juego.getPuntuacion();
+        }
+        return (double) suma /juegos.size();
+    }
+
+    public Videojuego mejorValorado() {
+        if (juegos.isEmpty()) {
+            return null;
+        }
+        Videojuego mejor = juegos.get(0);
+        for (Videojuego juego : juegos) {
+            if (juego.getPuntuacion() > mejor.getPuntuacion()) {
+                mejor = juego;
+            }
+        }
+        return mejor;
+    }
+
+    // metodo para juegos por estado -> cantidad
+
+    public HashMap<String, Integer> juegosPorEstado() {
+        HashMap<String, Integer> resultado = new HashMap<>();
+        for (Videojuego juego : juegos) {
+            String estado = juego.getEstado();
+            if (resultado.containsKey(estado)) {
+                resultado.put(estado, resultado.get(estado) + 1);
+            } else {
+                resultado.put(estado, 1);
+            }
+        }
+        return resultado;
+    }
+
+
 
 }
