@@ -122,6 +122,14 @@ public class Coleccion {
         return resultado;
     }
 
+    // guardar y cargar datos json
 
+    public ArrayList<Videojuego> getJuegos() {
+        return juegos;
+    }
+
+    public void setJuegos(ArrayList<Videojuego> juegos) {
+        this.juegos = juegos;
+    }
 
 }

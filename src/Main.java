@@ -1,4 +1,6 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.concurrent.SynchronousQueue;
 
 public class Main {
     public static void main(String[] args) {
@@ -39,6 +41,19 @@ public class Main {
         System.out.println("Mejor valorado: " + coleccion.mejorValorado().getTitulo());
         System.out.println("Juegos por estado: " + coleccion.juegosPorEstado());
 
+        // probando persistencia de datos
+        // guardar a json
+
+        GestorArchivo gestor = new GestorArchivo();
+        gestor.guardar(coleccion.getJuegos(), "coleccion.json");
+        System.out.println("Colección guardada");
+
+        // cargar
+
+        Coleccion coleccionCargada = new Coleccion();
+        coleccionCargada.setJuegos(gestor.cargar("coleccion.json"));
+        System.out.println("\n--- Colección cargada desde disco ---");
+        coleccionCargada.listarJuegos();
 
     }
 }
