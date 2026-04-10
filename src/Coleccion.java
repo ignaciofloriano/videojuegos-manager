@@ -1,3 +1,4 @@
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -46,7 +47,7 @@ public class Coleccion {
     public ArrayList<Videojuego> filtrarPorPlataforma(String plataforma) {
         ArrayList<Videojuego> resultado = new ArrayList<>();
         for (Videojuego juego : juegos) {
-            if (juego.getPlataforma().equalsIgnoreCase(plataforma)) {
+            if (normalizar(juego.getGenero()).equalsIgnoreCase(normalizar(plataforma))) {
                 resultado.add(juego);
             }
         }
@@ -58,7 +59,7 @@ public class Coleccion {
     public ArrayList<Videojuego> filtrarPorGenero(String genero) {
         ArrayList<Videojuego> resultado = new ArrayList<>();
         for (Videojuego juego : juegos) {
-            if (juego.getGenero().equalsIgnoreCase(genero)) {
+            if (normalizar(juego.getGenero()).equalsIgnoreCase(normalizar(genero))) {
                 resultado.add(juego);
             }
         }
@@ -70,7 +71,7 @@ public class Coleccion {
     public ArrayList<Videojuego> filtrarPorEstado(String estado) {
         ArrayList<Videojuego> resultado = new ArrayList<>();
         for (Videojuego juego : juegos) {
-            if (juego.getEstado().equalsIgnoreCase(estado)) {
+            if (normalizar(juego.getGenero()).equalsIgnoreCase(normalizar(estado))) {
                 resultado.add(juego);
             }
         }
@@ -130,6 +131,13 @@ public class Coleccion {
 
     public void setJuegos(ArrayList<Videojuego> juegos) {
         this.juegos = juegos;
+    }
+
+    // metodo para corregir bug con tildes al hacer busqueda
+
+    private String normalizar(String texto) {
+        return Normalizer.normalize(texto, Normalizer.Form.NFD)
+                .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
     }
 
 }
