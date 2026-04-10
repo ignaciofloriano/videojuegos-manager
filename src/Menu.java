@@ -28,6 +28,7 @@ public class Menu {
         System.out.println("6. Filtrar por género");
         System.out.println("7. Filtrar por estado");
         System.out.println("8. Ver estadísticas");
+        System.out.println("9. Editar juego");
         System.out.println("0. Salir");
         System.out.print("Elige una opción: ");
     }
@@ -54,6 +55,7 @@ public class Menu {
                 case 6 -> filtrarPorGenero();
                 case 7 -> filtrarPorEstado();
                 case 8 -> verEstadisticas();
+                case 9 -> editarJuego();
                 case 0 -> ejecutando = false;
                 default -> System.out.println("Opción no válida.");
             }
@@ -71,11 +73,11 @@ public class Menu {
         System.out.print("Género: ");
         String genero = scanner.nextLine();
         System.out.print("Año: ");
-        int anio = Integer.parseInt(scanner.nextLine());
+        int año = Integer.parseInt(scanner.nextLine());
         System.out.print("Desarrolladora: ");
         String desarrolladora = scanner.nextLine();
 
-        Videojuego juego = new Videojuego(titulo, plataforma, genero, anio, desarrolladora);
+        Videojuego juego = new Videojuego(titulo, plataforma, genero, año, desarrolladora);
         coleccion.agregarJuego(juego);
         gestor.guardar(coleccion.getJuegos(), RUTA);
         System.out.println("Juego añadido correctamente.");
@@ -149,6 +151,38 @@ public class Menu {
         } else {
             System.out.println("Mejor valorado: No hay juegos en la colección.");
         }
+    }
+
+    // metodo para modificar datos de un juego
+
+    private void editarJuego() {
+        System.out.print("¿Qué juego quieres editar?: ");
+        String titulo = scanner.nextLine();
+        Videojuego juego = coleccion.buscarPorTitulo(titulo);
+        if (juego == null) {
+            System.out.println("No se encontró ningún juego con ese título.");
+            return;
+        }
+        System.out.println("Estado actual: " + juego.getEstado());
+        System.out.println("¿En qué estado se encuentra el juego? (Pendiente / Jugando / Completado / Abandonado)");
+        String estado = scanner.nextLine();
+        if (!estado.isEmpty()) {
+            juego.setEstado(estado);
+        }
+        System.out.println("Puntuación actual: " + juego.getPuntuacion());
+        System.out.print("Escribe la puntuación del 1 al 10. (Pulsa enter para no cambiar nada): ");
+        String puntuacion = scanner.nextLine();
+        if (!puntuacion.isEmpty()) {
+            juego.setPuntuacion(Double.parseDouble(puntuacion.replace(",", ".")));
+        }
+        System.out.println("Notas actuales: " + juego.getNotas());
+        System.out.print("¿Nuevas notas? (Pulsa enter para no cambiar nada): ");
+        String notas = scanner.nextLine();
+        if (!notas.isEmpty()) {
+            juego.setNotas(notas);
+        }
+        gestor.guardar(coleccion.getJuegos(), RUTA);
+        System.out.println("Juego actualizado correctamente.");
     }
 
 }

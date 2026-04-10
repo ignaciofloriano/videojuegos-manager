@@ -92,7 +92,7 @@ public class Coleccion {
         for (Videojuego juego : juegos) {
             suma += juego.getPuntuacion();
         }
-        return (double) suma /juegos.size();
+        return Math.round((double) suma / juegos.size() * 100.0) / 100.0;
     }
 
     public Videojuego mejorValorado() {
@@ -108,7 +108,7 @@ public class Coleccion {
         return mejor;
     }
 
-    // metodo para juegos por estado -> cantidad
+    // metodo busca por estado -> convierte a cantidad por estado
 
     public HashMap<String, Integer> juegosPorEstado() {
         HashMap<String, Integer> resultado = new HashMap<>();
@@ -123,7 +123,7 @@ public class Coleccion {
         return resultado;
     }
 
-    // guardar y cargar datos json
+    // getter y setter guardar y cargar datos json
 
     public ArrayList<Videojuego> getJuegos() {
         return juegos;

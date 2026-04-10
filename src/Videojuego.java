@@ -5,7 +5,7 @@ public class Videojuego {
     private int año;
     private String desarrolladora;
     private String estado;
-    private int puntuacion;
+    private double puntuacion;
     private String notas;
 
     // constructor
@@ -71,11 +71,11 @@ public class Videojuego {
         this.estado = estado;
     }
 
-    public int getPuntuacion() {
+    public double getPuntuacion() {
         return puntuacion;
     }
 
-    public void setPuntuacion(int puntuacion) {
+    public void setPuntuacion(double puntuacion) {
         this.puntuacion = puntuacion;
     }
 
