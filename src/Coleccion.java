@@ -47,7 +47,7 @@ public class Coleccion {
     public ArrayList<Videojuego> filtrarPorPlataforma(String plataforma) {
         ArrayList<Videojuego> resultado = new ArrayList<>();
         for (Videojuego juego : juegos) {
-            if (normalizar(juego.getGenero()).equalsIgnoreCase(normalizar(plataforma))) {
+            if (juego.getPlataforma().equalsIgnoreCase(plataforma)) {
                 resultado.add(juego);
             }
         }
@@ -88,7 +88,7 @@ public class Coleccion {
         if (juegos.isEmpty()) {
             return 0;
         }
-        int suma = 0;
+        double suma = 0.0;
         for (Videojuego juego : juegos) {
             suma += juego.getPuntuacion();
         }
@@ -99,7 +99,7 @@ public class Coleccion {
         if (juegos.isEmpty()) {
             return null;
         }
-        Videojuego mejor = juegos.get(0);
+        Videojuego mejor = juegos.getFirst();
         for (Videojuego juego : juegos) {
             if (juego.getPuntuacion() > mejor.getPuntuacion()) {
                 mejor = juego;
