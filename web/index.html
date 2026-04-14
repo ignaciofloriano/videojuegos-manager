@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Videojuegos</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <!-- clases css problematicas, no veo las barritas en styles.css pero aqui si !-->
+    <style>
+        .genre-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .genre-label { font-size: 13px; color: #1d1d1f; width: 120px; flex-shrink: 0; }
+        .genre-bar-bg { flex: 1; height: 8px; border-radius: 99px; background: #F5F5F7; }
+        .genre-bar { height: 8px; border-radius: 99px; background: #534AB7; }
+        .genre-count { font-size: 12px; color: #86868b; width: 20px; text-align: right; }
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="topbar">
+        <div class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 6H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1zm-1 10H4V8h16v8zm-8-6h2v2h-2zm-4 0h2v2H8zm8 0h2v2h-2z"/></svg>
+            </div>
+            <span class="logo-name">ManaGame</span>
+            <span class="logo-sub">Mi colección de videojuegos</span>
+        </div>
+        <div class="nav-tabs">
+            <button class="tab active" id="tab-col" onclick="showTab('col')">Colección</button>
+            <button class="tab" id="tab-stats" onclick="showTab('stats')">Estadísticas</button>
+        </div>
+    </div>
+
+    <div class="main">
+        <div id="view-col" class="collection-view">
+            <div class="stats-row" id="stat-cards"></div>
+            <div class="section-header">
+                <span class="section-title">Mis juegos</span>
+                <div style="display:flex;gap:8px;align-items:center">
+                    <div class="search-bar">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                        <input type="text" id="search-input" placeholder="Buscar juego..." oninput="renderTable()">
+                    </div>
+                </div>
+            </div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Plataforma</th>
+                        <th>Género</th>
+                        <th>Año</th>
+                        <th>Nota</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="view-stats" class="stats-view" style="display:none">
+            <div class="stats-row" id="stat-cards2"></div>
+            <div class="table-card" style="padding:24px;margin-top:16px">
+                <div class="section-title" style="margin-bottom:16px">Juegos por género</div>
+                <div id="genre-chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    console.log('CSS cargado:', document.styleSheets.length);
+    let db = [];
+
+    function platClass(p) {
+        const map = { 'Switch': 'plat-switch', 'PC': 'plat-pc', 'PS4': 'plat-ps4', 'PS5': 'plat-ps5', 'Xbox': 'plat-xbox' };
+        return map[p] || 'plat-default';
+    }
+
+    function stars(n) {
+        let s = '';
+        for (let i = 1; i <= 10; i++) {
+            s += `<span style="color:${i <= n ? '#BA7517' : '#ddd'}">★</span>`;
+        }
+        return s;
+    }
+
+    function renderStatCards(id) {
+        if (db.length === 0) return;
+        const total = db.length;
+        const comp = db.filter(g => g.estado === 'completado').length;
+        const avg = (db.reduce((s, g) => s + g.puntuacion, 0) / total).toFixed(1);
+        const mejor = db.reduce((a, b) => b.puntuacion > a.puntuacion ? b : a);
+        document.getElementById(id).innerHTML = `
+            <div class="stat-card"><div class="stat-label">Total de juegos</div><div class="stat-value">${total}</div></div>
+            <div class="stat-card"><div class="stat-label">Completados</div><div class="stat-value" style="color:#1D9E75">${comp}</div><div class="stat-sub">${Math.round(comp/total*100)}% de la colección</div></div>
+            <div class="stat-card"><div class="stat-label">Nota media</div><div class="stat-value">${avg}<span style="font-size:14px;color:#86868b">/10</span></div></div>
+            <div class="stat-card"><div class="stat-label">Mejor valorado</div><div class="stat-value" style="font-size:15px;line-height:1.3">${mejor.titulo}</div><div class="stat-sub">${mejor.puntuacion}/10</div></div>
+        `;
+    }
+
+    function renderTable() {
+        const q = document.getElementById('search-input').value.toLowerCase();
+        const filtered = db.filter(g =>
+            g.titulo.toLowerCase().includes(q) ||
+            g.plataforma.toLowerCase().includes(q) ||
+            g.genero.toLowerCase().includes(q)
+        );
+        document.getElementById('tbody').innerHTML = filtered.map(g => `
+            <tr>
+                <td style="font-weight:500">${g.titulo}</td>
+                <td><span class="plat-badge ${platClass(g.plataforma)}">${g.plataforma}</span></td>
+                <td style="color:#86868b;font-size:12px">${g.genero}</td>
+                <td style="color:#86868b">${g.año}</td>
+                <td>${stars(g.puntuacion)}</td>
+                <td><span class="status-dot"><span class="dot dot-${g.estado}"></span>${g.estado}</span></td>
+            </tr>
+        `).join('');
+        renderStatCards('stat-cards');
+    }
+
+    function renderStats() {
+    renderStatCards('stat-cards2');
+    const byGen = {};
+    db.forEach(g => { byGen[g.genero] = (byGen[g.genero] || 0) + 1; });
+    const maxG = Math.max(...Object.values(byGen));
+    const chart = document.getElementById('genre-chart');
+    chart.innerHTML = '';
+    Object.entries(byGen)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([g, n]) => {
+            const row = document.createElement('div');
+            row.className = 'genre-row';
+            row.innerHTML = `
+                <span class="genre-label">${g}</span>
+                <div class="genre-bar-bg">
+                    <div class="genre-bar" style="width:${Math.round(n/maxG*100)}%"></div>
+                </div>
+                <span class="genre-count">${n}</span>
+            `;
+            chart.appendChild(row);
+        });
+}
+
+    function showTab(t) {
+    document.getElementById('tab-col').classList.toggle('active', t === 'col');
+    document.getElementById('tab-stats').classList.toggle('active', t === 'stats');
+
+    const viewCol = document.getElementById('view-col');
+    const viewStats = document.getElementById('view-stats');
+
+    if (t === 'col') {
+        viewCol.style.display = 'block';
+        viewStats.style.display = 'none';
+    } else {
+        viewCol.style.display = 'none';
+        viewStats.style.display = 'block';
+        renderStats();
+    }
+}
+
+    fetch('/api/juegos')
+        .then(res => res.json())
+        .then(data => {
+            db = data;
+            renderTable();
+        });
+</script>
+</body>
+</html>

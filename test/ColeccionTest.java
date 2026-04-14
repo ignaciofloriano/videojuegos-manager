@@ -6,6 +6,8 @@ import java.util.ArrayList;
 public class ColeccionTest {
     private Coleccion coleccion;
 
+    //prerarar coleccion para no repetir codigo
+
     @BeforeEach
     void setUp() {
         coleccion = new Coleccion();
@@ -13,6 +15,8 @@ public class ColeccionTest {
         coleccion.agregarJuego(new Videojuego("Celeste", "PC", "Plataformas", 2018, "Maddy Thorson"));
         coleccion.agregarJuego(new Videojuego("Zelda", "Switch", "Aventura", 2017, "Nintendo"));
     }
+
+    // tests de metodos con posibles fallos
 
     @Test
     void testTotalJuegos() {
