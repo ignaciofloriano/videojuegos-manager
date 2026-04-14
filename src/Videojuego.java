@@ -16,7 +16,7 @@ public class Videojuego {
         this.genero = genero;
         this.año = año;
         this.desarrolladora = desarrolladora;
-        this.estado = "pendiente";
+        this.estado = "PENDIENTE";
         this.puntuacion = 0;
         this.notas = "";
     }
@@ -68,7 +68,7 @@ public class Videojuego {
     }
 
     public void setEstado(String estado) {
-        this.estado = estado;
+        this.estado = estado.toUpperCase();
     }
 
     public double getPuntuacion() {

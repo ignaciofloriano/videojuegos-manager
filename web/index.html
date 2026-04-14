@@ -113,7 +113,7 @@
                 <td style="color:#86868b;font-size:12px">${g.genero}</td>
                 <td style="color:#86868b">${g.año}</td>
                 <td>${stars(g.puntuacion)}</td>
-                <td><span class="status-dot"><span class="dot dot-${g.estado.toLowerCase()}"></span>${g.estado}</span></td>
+                <td><span class="status-dot"><span class="dot dot-${g.estado.toUpperCase()}"></span>${g.estado}</span></td>
             </tr>
         `).join('');
         renderStatCards('stat-cards');

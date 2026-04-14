@@ -77,10 +77,10 @@ tr:hover td { background: #F5F5F7; }
 
     .status-dot { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #86868b; }
     .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .dot-completado { background: #1D9E75; }
-    .dot-jugando { background: #534AB7; }
-    .dot-pendiente { background: #EF9F27; }
-    .dot-abandonado { background: #E05252; }
+    .dot-COMPLETADO { background: #1D9E75; }
+    .dot-JUGANDO { background: #534AB7; }
+    .dot-PENDIENTE { background: #EF9F27; }
+    .dot-ABANDONADO { background: #E05252; }
 
 .stats-view { display: none; }
 .collection-view.hidden { display: none; }

@@ -167,7 +167,7 @@ public class Menu {
         System.out.println("¿En qué estado se encuentra el juego? (Pendiente / Jugando / Completado / Abandonado)");
         String estado = scanner.nextLine();
         if (!estado.isEmpty()) {
-            juego.setEstado(estado);
+            juego.setEstado(estado.toLowerCase());
         }
         System.out.println("Puntuación actual: " + juego.getPuntuacion());
         System.out.print("Escribe la puntuación del 1 al 10. (Pulsa enter para no cambiar nada): ");
