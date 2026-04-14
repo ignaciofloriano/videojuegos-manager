@@ -67,7 +67,20 @@ tr:last-child td { border-bottom: none; }
 tr:hover td { background: #F5F5F7; }
 
 .plat-badge {
-    display: inline-block; padding: 2px 8px; b
+    display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 500;
+    }
+    .plat-switch { background: #E1F5EE; color: #085041; }
+    .plat-pc { background: #E6F1FB; color: #0C447C; }
+    .plat-ps4, .plat-ps5 { background: #EEEDFE; color: #3C3489; }
+    .plat-xbox { background: #EAF3DE; color: #27500A; }
+    .plat-default { background: #F5F5F7; color: #86868b; }
+
+    .status-dot { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #86868b; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .dot-completado { background: #1D9E75; }
+    .dot-jugando { background: #534AB7; }
+    .dot-pendiente { background: #EF9F27; }
+    .dot-abandonado { background: #E05252; }
 
 .stats-view { display: none; }
 .collection-view.hidden { display: none; }
