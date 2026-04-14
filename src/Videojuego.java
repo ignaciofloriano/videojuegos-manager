@@ -21,6 +21,9 @@ public class Videojuego {
         this.notas = "";
     }
 
+    public Videojuego() {
+    }
+
     // setters y getters
 
     public String getTitulo() {

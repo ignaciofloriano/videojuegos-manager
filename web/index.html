@@ -36,6 +36,7 @@
             <div class="section-header">
                 <span class="section-title">Mis juegos</span>
                 <div style="display:flex;gap:8px;align-items:center">
+                    <button class="add-btn" onclick="openPanel()">+ Añadir juego</button>
                     <div class="search-bar">
                         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                         <input type="text" id="search-input" placeholder="Buscar juego..." oninput="renderTable()">
@@ -67,6 +68,60 @@
             </div>
         </div>
     </div>
+    <div id="panel-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.35); z-index:100;" onclick="closePanel()">
+        <div class="panel" onclick="event.stopPropagation()">
+            <div class="panel-title" id="panel-title">Añadir juego</div>
+            <div>
+                <label class="field-label">Título</label>
+                <input class="field-input" id="f-titulo" placeholder="Nombre del juego">
+            </div>
+            <div>
+                <label class="field-label">Plataforma</label>
+                <select class="field-input" id="f-plat">
+                    <option>PC</option>
+                    <option>PS5</option>
+                    <option>PS4</option>
+                    <option>Switch</option>
+                    <option>Xbox</option>
+                </select>
+            </div>
+            <div class="field-row">
+                <div>
+                    <label class="field-label">Género</label>
+                    <input class="field-input" id="f-genero" placeholder="RPG, Aventura...">
+                </div>
+                <div>
+                    <label class="field-label">Año</label>
+                    <input class="field-input" id="f-anio" type="number" value="2024">
+                </div>
+            </div>
+            <div>
+                <label class="field-label">Desarrolladora</label>
+                <input class="field-input" id="f-desarrolladora" placeholder="Nintendo, Sony...">
+            </div>
+            <div>
+                <label class="field-label">Estado</label>
+                <select class="field-input" id="f-estado">
+                    <option>PENDIENTE</option>
+                    <option>JUGANDO</option>
+                    <option>COMPLETADO</option>
+                    <option>ABANDONADO</option>
+                </select>
+            </div>
+            <div>
+                <label class="field-label">Nota: <span id="nota-val">5/10</span></label>
+                <input type="range" min="0" max="10" step="0.5" id="f-nota" value="5" style="width:100%" oninput="document.getElementById('nota-val').textContent=this.value+'/10'">
+            </div>
+            <div>
+                <label class="field-label">Notas</label>
+                <textarea class="field-input" id="f-notas" rows="3" placeholder="Comentarios..."></textarea>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+                <button class="save-btn" onclick="saveJuego()">Guardar</button>
+                <button class="cancel-btn" onclick="closePanel()">Cancelar</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     console.log('CSS cargado:', document.styleSheets.length);
@@ -88,7 +143,7 @@
     function renderStatCards(id) {
         if (db.length === 0) return;
         const total = db.length;
-        const comp = db.filter(g => g.estado === 'completado').length;
+        const comp = db.filter(g => g.estado === 'COMPLETADO').length;
         const avg = (db.reduce((s, g) => s + g.puntuacion, 0) / total).toFixed(1);
         const mejor = db.reduce((a, b) => b.puntuacion > a.puntuacion ? b : a);
         document.getElementById(id).innerHTML = `
@@ -113,7 +168,13 @@
                 <td style="color:#86868b;font-size:12px">${g.genero}</td>
                 <td style="color:#86868b">${g.año}</td>
                 <td>${stars(g.puntuacion)}</td>
-                <td><span class="status-dot"><span class="dot dot-${g.estado.toUpperCase()}"></span>${g.estado}</span></td>
+                <td>
+                    <span class="status-dot"><span class="dot dot-${g.estado.toUpperCase()}"></span>${g.estado}</span>
+                    <span style="float:right">
+                        <button class="action-btn" onclick='openPanel(${JSON.stringify(g)})'>Editar</button>
+                        <button class="action-btn del" onclick="deleteJuego('${g.titulo}')">Borrar</button>
+                    </span>
+                </td>
             </tr>
         `).join('');
         renderStatCards('stat-cards');
@@ -159,12 +220,70 @@
     }
 }
 
+loadJuegos();
+
+    let editandoTitulo = null;
+
+function openPanel(juego = null) {
+    editandoTitulo = juego ? juego.titulo : null;
+    document.getElementById('panel-title').textContent = juego ? 'Editar juego' : 'Añadir juego';
+    document.getElementById('f-titulo').value = juego ? juego.titulo : '';
+    document.getElementById('f-titulo').disabled = juego ? true : false;
+    document.getElementById('f-plat').value = juego ? juego.plataforma : 'PC';
+    document.getElementById('f-genero').value = juego ? juego.genero : '';
+    document.getElementById('f-anio').value = juego ? juego.año : 2024;
+    document.getElementById('f-desarrolladora').value = juego ? juego.desarrolladora : '';
+    document.getElementById('f-estado').value = juego ? juego.estado : 'PENDIENTE';
+    document.getElementById('f-nota').value = juego ? juego.puntuacion : 5;
+    document.getElementById('nota-val').textContent = (juego ? juego.puntuacion : 5) + '/10';
+    document.getElementById('f-notas').value = juego ? juego.notas : '';
+    document.getElementById('panel-overlay').style.display = 'block';
+}
+
+function closePanel() {
+    document.getElementById('panel-overlay').style.display = 'none';
+    editandoTitulo = null;
+}
+
+function saveJuego() {
+    const titulo = document.getElementById('f-titulo').value.trim();
+    if (!titulo) return;
+    const juego = {
+        titulo: titulo,
+        plataforma: document.getElementById('f-plat').value,
+        genero: document.getElementById('f-genero').value.trim(),
+        año: parseInt(document.getElementById('f-anio').value),
+        desarrolladora: document.getElementById('f-desarrolladora').value.trim(),
+        estado: document.getElementById('f-estado').value,
+        puntuacion: parseFloat(document.getElementById('f-nota').value),
+        notas: document.getElementById('f-notas').value.trim()
+    };
+
+    if (editandoTitulo) {
+        fetch(`/api/juegos/${encodeURIComponent(editandoTitulo)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(juego)
+        }).then(() => { closePanel(); loadJuegos(); });
+    } else {
+        fetch('/api/juegos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(juego)
+        }).then(() => { closePanel(); loadJuegos(); });
+    }
+}
+
+function deleteJuego(titulo) {
+    fetch(`/api/juegos/${encodeURIComponent(titulo)}`, { method: 'DELETE' })
+        .then(() => loadJuegos());
+}
+
+function loadJuegos() {
     fetch('/api/juegos')
         .then(res => res.json())
-        .then(data => {
-            db = data;
-            renderTable();
-        });
+        .then(data => { db = data; renderTable(); });
+}
 </script>
 </body>
 </html>
